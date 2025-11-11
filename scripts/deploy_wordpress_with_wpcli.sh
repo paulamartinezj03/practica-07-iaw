@@ -26,11 +26,22 @@ mysql -u root -e "DROP USER IF EXISTS '$DB_USER'@'$IP_CLIENTE_MYSQL';";
 mysql -u root -e "CREATE USER $DB_USER@'$IP_CLIENTE_MYSQL' IDENTIFIED BY '$DB_PASSWORD'";
 #Le asignamos privilegios de nuestra base de datos
 mysql -u root -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO $DB_USER@'$IP_CLIENTE_MYSQL'";
-#Creamos el archivo deconfiguracion de wordpress
-cp /var/www/html/wp-config-sample.php /var/www/html/wp-config.php
-#Configuramos las variables del archivo php
-sed -i "s/database_name_here/$DB_NAME/" /var/www/html/wp-config.php
-sed -i "s/username_here/$DB_USER/" /var/www/html/wp-config.php
-sed -i "s/password_here/$DB_PASSWORD/" /var/www/html/wp-config.php
-  #Modificamos el propietario y el grupo de /var/www/html a www-data
-  chown -R www-data:www-data /var/www/html
+#Creamos archivo wp_config
+wp config create \
+  --dbname=$DB_NAME \
+  --dbuser=$DB_USER \
+  --dbpass=$DB_PASSWORD \
+  --dbhost=localhost \
+  --path=/var/www/html \
+  --allow-root
+  #Instalamos wordpress
+  wp core install \
+  --url=wordpressiaw6.myddns.me \
+  --title=$WORDPRESS_TITLE \
+  --admin_user=$WORDPRESS_ADMIN_USER \
+  --admin_password=$WORDPRESS_ADMIN_PASSWORD \
+  --admin_email=$WORDPRESS_ADMIN_EMAIL \
+  --path=/var/www/html \
+  --allow-root  
+#Modificamos el propietario y el grupo de /var/www/html a www-data
+chown -R www-data:www-data /var/www/html
