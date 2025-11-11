@@ -43,5 +43,15 @@ wp config create \
   --admin_email=$WORDPRESS_ADMIN_EMAIL \
   --path=/var/www/html \
   --allow-root  
+#Configuramos los enlaces permanentes
+wp rewrite structure '/%postname%/' \
+  --path=/var/www/html \
+  --allow-root
+#Instalar plugin
+wp plugin install wps-hide-login --activate \
+    -path=/var/www/html \
+    --allow-root
+#Configuramos la url personalizada para el login
+wp option update whl_page $URL_HIDE_LOGIN --path=/var/www/html --allow-root
 #Modificamos el propietario y el grupo de /var/www/html a www-data
 chown -R www-data:www-data /var/www/html
