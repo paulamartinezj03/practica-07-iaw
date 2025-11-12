@@ -61,4 +61,4 @@ wp theme install mindscape --activate \
 --allow-root
 ## Modificamos el propietario y el grupo de /var/www/html a www-data
 chown -R www-data:www-data /var/www/html
-
+![](/practica-07-iaw/images/capturaswpcli.png)
